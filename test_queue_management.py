@@ -102,6 +102,55 @@ class TestQueueManagementSystem(unittest.TestCase):
             ["Alice", "Eve"]
         )
 
+    def test_multiple_regular_customers(self):
+        add_customer("regular", "Bob")
+        add_customer("regular", "Charlie")
+        self.assertEqual(
+            list(regular_queue.queue),
+            ["Bob", "Charlie"]
+        )
+
+    def test_remove_multiple_customers(self):
+        add_customer("VIP", "Alice")
+        add_customer("VIP", "Eve")
+        add_customer("regular", "Bob")
+        add_customer("regular", "Charlie")
+
+        self.assertEqual(remove_customer(), "Alice")
+        self.assertEqual(remove_customer(), "Eve")
+        self.assertEqual(remove_customer(), "Bob")
+        self.assertEqual(remove_customer(), "Charlie")
+
+    def test_queue_consistency(self):
+        add_customer("VIP", "Alice")
+        add_customer("VIP", "Eve")
+        add_customer("regular", "Bob")
+        add_customer("regular", "Charlie")
+
+        self.assertEqual(
+            display_queues(),
+            {
+                "VIP": ["Alice", "Eve"],
+                "Regular": ["Bob", "Charlie"]
+            }
+        )
+
+        remove_customer()
+        self.assertEqual(
+            display_queues(),
+            {
+                "VIP": ["Eve"],
+                "Regular": ["Bob", "Charlie"]
+            }
+        )
+
+    def test_add_and_remove_immediate(self):
+        add_customer("VIP", "Alice")
+        add_customer("regular", "Bob")
+
+        self.assertEqual(remove_customer(), "Alice")
+        self.assertEqual(remove_customer(), "Bob")
+
 
 if __name__ == "__main__":
     unittest.main()
