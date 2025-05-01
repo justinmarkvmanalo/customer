@@ -102,6 +102,6 @@ class TestQueueManagementSystem(unittest.TestCase):
             ["Alice", "Eve"]
         )
 
-    
+
 if __name__ == "__main__":
     unittest.main()
