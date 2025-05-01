@@ -37,6 +37,45 @@ class TestQueueManagementSystem(unittest.TestCase):
         priority_queue = Queue()  # Reset VIP queue
         regular_queue = Queue()  # Reset regular queue
 
+    def test_add_customer_vip(self):
+        add_customer("VIP", "Alice")
+        self.assertEqual(
+            list(priority_queue.queue),
+            ["Alice"]
+        )
+
+    def test_add_customer_regular(self):
+        add_customer("regular", "Bob")
+        self.assertEqual(
+            list(regular_queue.queue),
+            ["Bob"]
+        )
+
+    def test_remove_customer_vip(self):
+        add_customer("VIP", "Alice")
+        add_customer("regular", "Bob")
+        removed = remove_customer()
+        self.assertEqual(removed, "Alice")
+        self.assertEqual(
+            list(priority_queue.queue),
+            []
+        )
+        self.assertEqual(
+            list(regular_queue.queue),
+            ["Bob"]
+        )
+
+    def test_display_queues(self):
+        add_customer("VIP", "Alice")
+        add_customer("regular", "Bob")
+        queues = display_queues()
+        self.assertEqual(
+            queues,
+            {
+                "VIP": ["Alice"],
+                "Regular": ["Bob"]
+            }
+        )
 
 if __name__ == "__main__":
     unittest.main()
