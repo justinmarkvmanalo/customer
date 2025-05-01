@@ -151,6 +151,45 @@ class TestQueueManagementSystem(unittest.TestCase):
         self.assertEqual(remove_customer(), "Alice")
         self.assertEqual(remove_customer(), "Bob")
 
+    def test_no_vip_multiple_regular(self):
+        add_customer("regular", "Bob")
+        add_customer("regular", "Charlie")
+
+        self.assertEqual(remove_customer(), "Bob")
+        self.assertEqual(remove_customer(), "Charlie")
+
+    def test_empty_queues_after_removal(self):
+        add_customer("VIP", "Alice")
+        add_customer("regular", "Bob")
+
+        remove_customer()
+        remove_customer()
+
+        self.assertEqual(
+            display_queues(),
+            {
+                "VIP": [],
+                "Regular": []
+            }
+        )
+
+    def test_remove_empty_queue_multiple_times(self):
+        # Remove from an empty queue multiple times
+        self.assertIsNone(remove_customer())
+        self.assertIsNone(remove_customer())
+        self.assertIsNone(remove_customer())  # Ensure no errors
+
+    def test_display_empty_queues(self):
+        # Test display when both queues are empty
+        queues = display_queues()
+        self.assertEqual(
+            queues,
+            {
+                "VIP": [],
+                "Regular": []
+            }
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
