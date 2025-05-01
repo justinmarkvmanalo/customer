@@ -77,6 +77,31 @@ class TestQueueManagementSystem(unittest.TestCase):
             }
         )
 
+    def test_add_customer_invalid(self):
+        with self.assertRaises(ValueError):
+            add_customer("invalid", "Charlie")
 
+    def test_remove_customer_regular(self):
+        add_customer("regular", "Bob")
+        removed = remove_customer()
+        self.assertEqual(removed, "Bob")
+        self.assertEqual(
+            list(regular_queue.queue),
+            []
+        )
+
+    def test_remove_customer_empty(self):
+        removed = remove_customer()
+        self.assertIsNone(removed)
+
+    def test_multiple_vip_customers(self):
+        add_customer("VIP", "Alice")
+        add_customer("VIP", "Eve")
+        self.assertEqual(
+            list(priority_queue.queue),
+            ["Alice", "Eve"]
+        )
+
+    
 if __name__ == "__main__":
     unittest.main()
